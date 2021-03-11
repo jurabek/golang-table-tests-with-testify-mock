@@ -1,5 +1,5 @@
 # golang-table-tests-with-testify-mock
-This repo shows how to test and mock multiple dependencies in table driven tests using Testify Mock
+This repo shows how to test and mock multiple dependencies using table-driven tests with testify-mock in Golang
 
 
 ## Links to read
