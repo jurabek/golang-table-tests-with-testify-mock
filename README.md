@@ -3,8 +3,7 @@ This repo shows how to test and mock multiple dependencies using table-driven te
 
 
 ## Problem
-Sometimes you need to mock multiple dependencies for specific test cases, imagine we have a type `MacBook` and it depends on `CPU`, `GPU` and `RAM` and we have a `Diagnose` method that returns an error if some of the dependencies hit the threshold.
-
+In unit testing and mocking world we need to mock multiple dependencies for specific test cases, (e.g) imagine we have a  `struct MacBook` and it depends on `CPU`, `GPU` and `RAM` and we have a `Diagnose` method that returns an error if some of the dependencies `usage` property hits the threshold.
 ```
 type MacBook struct {
 	cpu    cpu.CPU
@@ -28,7 +27,7 @@ func (m *MacBook) Diagnose(cpuThreshold, gpuThreshold, memoryThreshold int) erro
 	return nil
 }
 ```
-as you can see we have 3 if condtions, to be able to test happy case that returns no error, we need to write at least 4 unit tests and mock all dependencies.
+example above we have 3 if conditions, in order to test and get happy result that returns no error, we should have to write at least 4 unit tests or more and mock all dependencies.
 
 ## Solution
 ```
@@ -71,8 +70,7 @@ func TestMacbookDiagnose(t *testing.T) {
 		},
 	}
 ```
-in the table-driven testing we gonna define slice of struct that represents test cases, in the example above we have struct that contains callback functions `on: func(*depFields)` and `assert: func(*depFields)` this functions will be called when call test cases and dependencies will be passed that we wanted to `mock` and `assertion calls`
-
+basically in the table-driven testing we will define slice of structs that represents test cases, in the example above we have struct that contains callback functions `on: func(*depFields)` and `assert: func(*testing.T, *depFields)` when we call those methods `type depFields struct{}` will be passed into it in order to `mock` or `assert`
 ```
 for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -100,7 +98,7 @@ for _, tt := range tests {
 	}
 ```
 
-we iterate all our test cases and run child test functions, on each case we creating dependency of mocks and passing it onto `on` function that prepares us mocks, at the end we also checking test cases `assertion` this helps us to assert number calls that mocked methods are called and etc. 
+example above we are iterating all test cases and running sub tests, on each case we creating `f := &depFields{}` of mocks and passing it onto `on` function to prepare mocks, at the end of the test we also checking `assertion` of mock calls, this helps us to assert number of calls that mocked methods are called inside the `Diagnose` method. 
 
 ## Links to read
 [Table-Driven tests in Go](https://github.com/golang/go/wiki/TableDrivenTests)

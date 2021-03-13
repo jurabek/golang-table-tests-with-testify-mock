@@ -50,7 +50,7 @@ func TestMacbook(t *testing.T) {
 		out  error
 
 		on     func(*depFields)
-		assert func(*depFields)
+		assert func(*testing.T, *depFields)
 	}{
 		{
 			name: "when CPU usage larger than CPU threshold diagnose return CpuUtilizationError",
@@ -59,7 +59,7 @@ func TestMacbook(t *testing.T) {
 			on: func(df *depFields) {
 				df.cpu.On("Usage").Return(60) // 60% CPU usage
 			},
-			assert: func(df *depFields) {
+			assert: func(t *testing.T, df *depFields)  {
 				df.cpu.AssertNumberOfCalls(t, "Usage", 1)
 			},
 		},
@@ -71,7 +71,7 @@ func TestMacbook(t *testing.T) {
 				df.cpu.On("Usage").Return(40) // 40% CPU usage less than cpuThreshold
 				df.gpu.On("Usage").Return(95) // 95% gpu usage larger than gpuThreshold
 			},
-			assert: func(df *depFields) {
+			assert: func(t *testing.T, df *depFields)  {
 				df.cpu.AssertNumberOfCalls(t, "Usage", 1)
 				df.gpu.AssertNumberOfCalls(t, "Usage", 1)
 			},
@@ -86,7 +86,7 @@ func TestMacbook(t *testing.T) {
 				df.gpu.On("Usage").Return(50)          // 50% gpu usage less than gpuThreshold
 				df.memory.On("FreeMemory").Return(900) // 900 MB free memory left so it is less than 1000 mb threshold
 			},
-			assert: func(df *depFields) {
+			assert: func(t *testing.T, df *depFields)  {
 				df.cpu.AssertNumberOfCalls(t, "Usage", 1)
 				df.gpu.AssertNumberOfCalls(t, "Usage", 1)
 				df.memory.AssertNumberOfCalls(t, "FreeMemory", 1)
@@ -102,7 +102,7 @@ func TestMacbook(t *testing.T) {
 				df.gpu.On("Usage").Return(50)           // 50% gpu usage less than gpuThreshold
 				df.memory.On("FreeMemory").Return(2000) // 2000 MB free memory left so it is larger than 1000 mb threshold
 			},
-			assert: func(df *depFields) {
+			assert: func(t *testing.T, df *depFields)  {
 				df.cpu.AssertNumberOfCalls(t, "Usage", 1)
 				df.gpu.AssertNumberOfCalls(t, "Usage", 1)
 				df.memory.AssertNumberOfCalls(t, "FreeMemory", 1)
@@ -130,7 +130,7 @@ func TestMacbook(t *testing.T) {
 				t.Errorf("got %v, want %v", err, tt.out)
 			}
 			if tt.assert != nil {
-				tt.assert(f)
+				tt.assert(t, f)
 			}
 		})
 	}
