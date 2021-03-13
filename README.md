@@ -3,7 +3,7 @@ This repo shows how to test and mock multiple dependencies using table-driven te
 
 
 ## Problem
-In unit testing and mocking world we need to mock multiple dependencies for specific test cases, (e.g) imagine we have a  `struct MacBook` and it depends on `CPU`, `GPU` and `RAM` and we have a `Diagnose` method that returns an error if some of the dependencies `usage` property hits the threshold.
+In unit testing and mocking world we need to mock multiple dependencies for specific test cases, (e.g) imagine we have a  `struct MacBook` and it depends on `CPU`, `GPU` and `RAM` and we have a `Diagnose` method that returns an error if some of the dependencies `used resources` hits the threshold.
 ```
 type MacBook struct {
 	cpu    cpu.CPU
