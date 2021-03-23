@@ -62,7 +62,7 @@ func TestMacbookDiagnose(t *testing.T) {
 				df.gpu.On("Usage").Return(50)           // 50% gpu usage less than gpuThreshold
 				df.memory.On("FreeMemory").Return(2000) // 2000 MB free memory left so it is larger than 1000 mb threshold
 			},
-			assert: func(df *depFields) {
+			assert: func(t *testing.T, df *depFields) {
 				df.cpu.AssertNumberOfCalls(t, "Usage", 1)
 				df.gpu.AssertNumberOfCalls(t, "Usage", 1)
 				df.memory.AssertNumberOfCalls(t, "FreeMemory", 1)
@@ -92,7 +92,7 @@ for _, tt := range tests {
 				t.Errorf("got %v, want %v", err, tt.out)
 			}
 			if tt.assert != nil {
-				tt.assert(f)
+				tt.assert(t, f)
 			}
 		})
 	}
